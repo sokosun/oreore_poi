@@ -268,7 +268,7 @@ const uint8_t * extractline(const image_info * info, const int32_t y){
 
     const auto mody = y % limit;
     if(info->mirror && mody >= info->height){
-        return &(info->image[3 * info->width * (limit - mody)]);
+        return &(info->image[3 * info->width * (limit - mody - 1)]);
     }
 
     return &(info->image[3 * info->width * mody]);
