@@ -334,8 +334,8 @@ int main()
             }
 
             pack_parallel(pio_packet, blankline);
-            dma_channel_set_read_addr(DMA0, (void*)pio_packet, true);
             sleep_us(POLL_GPIO_us);
+            dma_channel_set_read_addr(DMA0, (void*)pio_packet, true);
             continue;
         }
 
@@ -353,7 +353,6 @@ int main()
         }else{
             pack_parallel(pio_packet, extractline(info, idx));
         }
-        dma_channel_set_read_addr(DMA0, (void*)pio_packet, true);
 
         const int32_t limit = info->mirror ? info->height * 2 : info->height;
         if(++idx >= limit){
@@ -361,6 +360,11 @@ int main()
             idx = info->loop ? 0 : INT32_MIN;
         }
         sleep_us_since(info->period_us, t);
+
+        // This code calls pack, sleep and dma functions sequentially.
+        // Flash memory caching should happen while sleep.
+        // // LEDs could flicker if caching and dma transfer run simultaneously.
+        dma_channel_set_read_addr(DMA0, (void*)pio_packet, true);
     }
 
 }
