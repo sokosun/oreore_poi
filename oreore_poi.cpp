@@ -262,7 +262,7 @@ const uint8_t * extractline(const image_info * info, const int32_t y){
     }
     
     const uint32_t limit = info->mirror ? info->height * 2 : info->height;
-    if(!info->loop && y >= limit){
+    if(!info->loop && static_cast<uint32_t>(y) >= limit){
         return blankline;
     }
 
@@ -355,7 +355,7 @@ int main()
         }
         dma_channel_set_read_addr(DMA0, (void*)pio_packet, true);
 
-        const uint32_t limit = info->mirror ? info->height * 2 : info->height;
+        const int32_t limit = info->mirror ? info->height * 2 : info->height;
         if(++idx >= limit){
             // Switch to State HALT here
             idx = info->loop ? 0 : INT32_MIN;

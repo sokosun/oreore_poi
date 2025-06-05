@@ -33,8 +33,9 @@ project(oreore_poi C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-# Add executable. Default name is the project name, version 0.1
+add_compile_options(-Wall)
 
+# Add executable. Default name is the project name, version 0.1
 add_executable(oreore_poi oreore_poi.cpp )
 
 pico_set_program_name(oreore_poi "oreore_poi")
